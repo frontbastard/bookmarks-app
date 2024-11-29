@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from account.forms import UserRegistrationForm
+from account.forms import UserRegistrationForm, UserEditForm, ProfileEditForm
+from account.models import Profile
 
 
 @login_required
@@ -23,6 +24,7 @@ def register(request):
                 user_form.cleaned_data["password"]
             )
             new_user.save()
+            Profile.objects.create(user=new_user)
 
             return render(
                 request,
@@ -36,4 +38,34 @@ def register(request):
         request,
         "account/register.html",
         {"user_form": user_form}
+    )
+
+
+@login_required
+def edit_profile(request):
+    if request.method == "POST":
+        user_form = UserEditForm(
+            instance=request.user,
+            data=request.POST,
+        )
+        profile_form = ProfileEditForm(
+            instance=request.user.profile,
+            data=request.POST,
+            files=request.FILES,
+        )
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+        profile_form = ProfileEditForm(instance=request.user.profile)
+
+    return render(
+        request,
+        "account/edit_profile.html",
+        {
+            "user_form": user_form,
+            "profile_form": profile_form,
+        }
     )
