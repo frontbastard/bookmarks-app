@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 from account.models import Profile
 
@@ -26,14 +27,15 @@ class UserRegistrationForm(forms.ModelForm):
         return cd["password2"]
 
     def clean_email(self):
-        cd = self.cleaned_data
-        email_exists = get_user_model().objects.filter(
-            email=cd["email"]
-        ).exists()
-
-        if email_exists:
-            raise forms.ValidationError("User with this email already exists.")
-        return cd["email"]
+        data = self.cleaned_data["email"]
+        qs = User.objects.exclude(
+            id=self.instance.id
+        ).filter(
+            email=data
+        )
+        if qs.exists():
+            raise forms.ValidationError("Email already in use.")
+        return data
 
 
 class UserEditForm(forms.ModelForm):
