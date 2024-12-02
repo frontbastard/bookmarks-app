@@ -24,7 +24,7 @@ SECRET_KEY = "django-insecure-%e+x+wfe-wax7a+&k@_0%^8z(_0#zw&c$(f4jf(pmqalc-rnln
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["mysite.com", "localhost", "127.0.0.1"]
 
 # Login, logout routes and redirects
 LOGIN_REDIRECT_URL = "dashboard"
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "social_django",
 ]
 
 MIDDLEWARE = [
