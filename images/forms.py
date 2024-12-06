@@ -1,9 +1,9 @@
-from django import forms
-
-from images.models import Image
 import requests
+from django import forms
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
+
+from images.models import Image
 
 
 class ImageCreateForm(forms.ModelForm):
