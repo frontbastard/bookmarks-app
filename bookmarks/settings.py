@@ -26,6 +26,12 @@ SECRET_KEY = "django-insecure-%e+x+wfe-wax7a+&k@_0%^8z(_0#zw&c$(f4jf(pmqalc-rnln
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+if DEBUG:
+    import mimetypes
+
+    mimetypes.add_type("application/javascript", ".js", True)
+    mimetypes.add_type("text/css", ".css", True)
+
 ALLOWED_HOSTS = ["mysite.com", "localhost", "127.0.0.1"]
 
 # Login, logout routes and redirects

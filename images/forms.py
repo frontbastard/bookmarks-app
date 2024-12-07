@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 import requests
 from django import forms
 from django.core.files.base import ContentFile
@@ -17,7 +19,9 @@ class ImageCreateForm(forms.ModelForm):
     def clean_url(self):
         url = self.cleaned_data["url"]
         valid_extensions = ["jpg", "jpeg", "png"]
-        extension = url.rsplit(".", 1)[1].lower()
+        parsed_url = urlparse(url)
+        path = parsed_url.path
+        extension = path.rsplit(".", 1)[1].lower()
 
         if extension not in valid_extensions:
             raise forms.ValidationError(
