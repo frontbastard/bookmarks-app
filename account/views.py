@@ -7,15 +7,26 @@ from django.views.decorators.http import require_POST
 
 from account.forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 from account.models import Profile, Contact
+from actions.models import Action
 from actions.utils import create_action
 
 
 @login_required
 def dashboard(request):
+    # Display all actions by default
+    actions = Action.objects.exclude(user=request.user)
+    following_ids = request.user.following.values_list("id", flat=True)
+
+    if following_ids:
+        # If user is following others, retrieve only their actions
+        actions = actions.filter(user_id__in=following_ids)
+
+    actions = actions[:10]
+
     return render(
         request,
         "account/dashboard.html",
-        {"section": "dashboard"}
+        {"section": "dashboard", "actions": actions}
     )
 
 
@@ -88,6 +99,7 @@ def edit_profile(request):
 
 User = get_user_model()
 
+
 @login_required
 def user_list(request):
     users = User.objects.filter(is_active=True)
@@ -96,6 +108,7 @@ def user_list(request):
         "account/user/list.html",
         {"section": "people", "users": users}
     )
+
 
 @login_required
 def user_detail(request, username):
