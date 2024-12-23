@@ -22,6 +22,8 @@
     <div id="action-list">
         {% for action in actions %}
             {% include "actions/action/detail.html" %}
+        {% empty %}
+            <p>Nothing</p>
         {% endfor %}
     </div>
 {% endblock %}
