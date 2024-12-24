@@ -53,12 +53,14 @@ INSTALLED_APPS = [
     "social_django",
     "django_extensions",
     "easy_thumbnails",
+    "debug_toolbar",
     "images.apps.ImagesConfig",
     "actions.apps.ActionsConfig",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -169,3 +171,5 @@ SOCIAL_AUTH_PIPELINE = [
 ABSOLUTE_URL_OVERRIDES = {
     "auth.user": lambda u: reverse_lazy("user_detail", args=[u.username]),
 }
+
+INTERNAL_IPS = ["127.0.0.1"]
